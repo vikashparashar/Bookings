@@ -1,74 +1,78 @@
 package render
 
 import (
-	"fmt"
+	"bytes"
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 // stored parsed template into it
 // tc is for template cache
 var tc = make(map[string]*template.Template)
 
-/*
 // 1st Way For Rendering Template
 // this function will read 2 files from disk every single time we run our app and this cause memory cost
-func RenderTemplates(w http.ResponseWriter, t string) {
-	tmpl, err := template.ParseFiles("./templates/"+t, "./templates/base.layout.tmpl")
+func RenderTemplates(w http.ResponseWriter, temp string) {
+
+	// create a template cache
+	tc, err := createTemplateCache()
 	if err != nil {
 		log.Fatalln("error parsing template files", err)
 	}
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		log.Fatalln("error parsing template's : ", err)
+	// get requestd templated cache
+	t, ok := tc[temp]
+	if !ok {
+		log.Fatal(err)
 	}
+
+	buf := new(bytes.Buffer)
+	err = t.Execute(buf, nil)
+	if err != nil {
+		log.Println(err)
+	}
+	// rander the template
+
+	_, err = buf.WriteTo(w)
+	if err != nil {
+		log.Println(err)
+	}
+
 }
-*/
 
-// 2nd Way For Rendering Template
-// but now we will create a function which will read file from disk only a single time , so waistage of memory uses
+func createTemplateCache() (map[string]*template.Template, error) {
+	// var myCache = make(map[string]*template.Template)
+	myCache := map[string]*template.Template{}
 
-func RenderTemplates(w http.ResponseWriter, t string) {
-	var tmpl *template.Template
-	var err error
-	// check to see if we already have template into cache
+	// get all the files name *.page.tmpl from ./templates
+	pages, err := filepath.Glob("./templates/*.page.tmpl")
+	if err != nil {
+		return myCache, err
+	}
 
-	// if exists use it else create it
+	// range through all pages ending with *.page.tmpl
 
-	_, inMap := tc[t]
-	if !inMap {
-		// need to create the template
-		log.Println("Creating The Template .")
-		err = createTemplateCache(t)
+	for _, page := range pages {
+		name := filepath.Base(page)
+		ts, err := template.New(name).ParseFiles(page)
 		if err != nil {
-			log.Println(err)
+			log.Println("failed to parse file : ", ts)
 		}
-	} else {
-		// we have template
-		log.Println("Using Cached Template .")
+
+		matches, err := filepath.Glob("./templates/*.layout.tmpl")
+		if err != nil {
+			return myCache, err
+		}
+		if len(matches) > 0 {
+			ts, err = ts.ParseGlob("./templates/*.layout.tmpl")
+			if err != nil {
+				return myCache, err
+			}
+		}
+
+		myCache[name] = ts
 	}
 
-	tmpl = tc[t]
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		log.Fatalln("error parsing template's : ", err)
-	}
-}
-
-func createTemplateCache(t string) error {
-	templates := []string{
-		fmt.Sprintf("./templates/%s" + t),
-		"./templates/base.layout.tmpl",
-	}
-
-	// parse the template
-	tmpl, err := template.ParseFiles(templates...)
-	if err != nil {
-		log.Fatalln("error parsing template files", err)
-	}
-
-	// adding parsed template into cache
-	tc[t] = tmpl
-	return nil
+	return myCache, nil
 }
