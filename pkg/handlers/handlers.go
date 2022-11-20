@@ -3,25 +3,48 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/vikashparashar/bookings/pkg/config"
 	"github.com/vikashparashar/bookings/pkg/render"
 )
 
-func Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "home.page.tmpl")
-}
-func About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "about.page.tmpl")
+// Repo is the Repository used by the handlers
+var Repo *Repository
+
+// Repository is the Repository type
+type Repository struct {
+	App *config.AppConfig
 }
 
-func General(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "general.page.tmpl")
+// NewRepo creates the new Repository
+func NewRepo(a *config.AppConfig) *Repository {
+	return &Repository{
+		App: a,
+	}
 }
-func Major(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "major.page.tmpl")
+
+// NewHandlers sets the repository for handlers
+func NewHandlers(r *Repository) {
+	Repo = r
 }
-func Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "contact.page.tmpl")
+func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	// perform some logic
+
+	// sending data to the template
+	render.RenderTemplates(w, "home.page.tmpl", nil)
 }
-func CheckAvailability(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "check.page.tmpl")
+func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "about.page.tmpl", nil)
+}
+
+func (m *Repository) General(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "general.page.tmpl", nil)
+}
+func (m *Repository) Major(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "major.page.tmpl", nil)
+}
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "contact.page.tmpl", nil)
+}
+func (m *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "check.page.tmpl", nil)
 }

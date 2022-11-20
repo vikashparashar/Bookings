@@ -23,15 +23,17 @@ func main() {
 	}
 
 	app.TemplateCache = tc
-
+	app.UseCache = false // in development mode useCache need to be False otherwise in production mode it sets to be True
+	repo := handlers.NewRepo(&app)
+	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 
-	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/about", handlers.About)
-	http.HandleFunc("/general", handlers.General)
-	http.HandleFunc("/major", handlers.Major)
-	http.HandleFunc("/contact", handlers.Contact)
-	http.HandleFunc("/check", handlers.CheckAvailability)
+	http.HandleFunc("/", handlers.Repo.Home)
+	http.HandleFunc("/about", handlers.Repo.About)
+	http.HandleFunc("/general", handlers.Repo.General)
+	http.HandleFunc("/major", handlers.Repo.Major)
+	http.HandleFunc("/contact", handlers.Repo.Contact)
+	http.HandleFunc("/check", handlers.Repo.CheckAvailability)
 
 	fmt.Println("\t ->---->>    Starting The Application On Port : 8080    <<----<-")
 	http.ListenAndServe(portNumber, nil)
