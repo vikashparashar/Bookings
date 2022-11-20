@@ -4,10 +4,16 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/vikashparashar/bookings/cmd/pkg/config"
 	"github.com/vikashparashar/bookings/cmd/pkg/handlers"
 )
 
+const (
+	portNumber string = ":8080"
+)
+
 func main() {
+	var app config.AppConfig
 	http.HandleFunc("/", handlers.Home)
 	http.HandleFunc("/about", handlers.About)
 	http.HandleFunc("/general", handlers.General)
@@ -16,5 +22,5 @@ func main() {
 	http.HandleFunc("/check", handlers.CheckAvailability)
 
 	fmt.Println("\t ->---->>    Starting The Application On Port : 8080    <<----<-")
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(portNumber, nil)
 }
