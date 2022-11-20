@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/vikashparashar/bookings/cmd/pkg/config"
-	"github.com/vikashparashar/bookings/cmd/pkg/handlers"
+	"github.com/vikashparashar/bookings/pkg/config"
+	"github.com/vikashparashar/bookings/pkg/handlers"
+	"github.com/vikashparashar/bookings/pkg/render"
 )
 
 const (
@@ -14,6 +16,16 @@ const (
 
 func main() {
 	var app config.AppConfig
+
+	tc, err := render.CreateTemplateCache()
+	if err != nil {
+		log.Fatalln("can not create template")
+	}
+
+	app.TemplateCache = tc
+
+	render.NewTemplates(&app)
+
 	http.HandleFunc("/", handlers.Home)
 	http.HandleFunc("/about", handlers.About)
 	http.HandleFunc("/general", handlers.General)

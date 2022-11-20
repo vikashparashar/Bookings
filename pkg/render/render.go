@@ -6,42 +6,54 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/vikashparashar/bookings/pkg/config"
 )
 
 // stored parsed template into it
 // tc is for template cache
 var tc = make(map[string]*template.Template)
 
-// 1st Way For Rendering Template
-// this function will read 2 files from disk every single time we run our app and this cause memory cost
-func RenderTemplates(w http.ResponseWriter, temp string) {
+var functions = template.FuncMap{}
 
+var app *config.AppConfig
+
+// NewTemplates sets the config for the template package
+func NewTemplates(a *config.AppConfig) {
+	app = a
+}
+
+func RenderTemplates(w http.ResponseWriter, temp string) {
+	// get the template cache from the app config
+	tc := app.TemplateCache
 	// create a template cache
-	tc, err := createTemplateCache()
-	if err != nil {
-		log.Fatalln("error parsing template files", err)
-	}
+	// tc, err := CreateTemplateCache()
+	// if err != nil {
+	// 	log.Fatalln("error parsing template files", err)
+	// }
 	// get requestd templated cache
 	t, ok := tc[temp]
 	if !ok {
-		log.Fatal(err)
+		log.Fatalln("could not get template from template cache")
 	}
 
 	buf := new(bytes.Buffer)
-	err = t.Execute(buf, nil)
+
+	err := t.Execute(buf, nil)
+
 	if err != nil {
-		log.Println(err)
+		log.Fatalln("could ")
 	}
 	// rander the template
 
 	_, err = buf.WriteTo(w)
 	if err != nil {
-		log.Println(err)
+		log.Println("error writing template to browser")
 	}
 
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 	// var myCache = make(map[string]*template.Template)
 	myCache := map[string]*template.Template{}
 
