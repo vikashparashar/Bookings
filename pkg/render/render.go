@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/vikashparashar/bookings/pkg/config"
+	"github.com/vikashparashar/bookings/pkg/models"
 )
 
 // stored parsed template into it
@@ -23,7 +24,11 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func RenderTemplates(w http.ResponseWriter, temp string, data interface{}) {
+func AddDefaultData(td *models.Template_Data) *models.Template_Data {
+	return td
+}
+
+func RenderTemplates(w http.ResponseWriter, temp string, td *models.Template_Data) {
 
 	var tc = app.TemplateCache
 	if !app.UseCache {
@@ -48,8 +53,8 @@ func RenderTemplates(w http.ResponseWriter, temp string, data interface{}) {
 	}
 
 	buf := new(bytes.Buffer)
-
-	err := t.Execute(buf, nil)
+	td = AddDefaultData(td)
+	err := t.Execute(buf, td)
 
 	if err != nil {
 		log.Fatalln("could ")

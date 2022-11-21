@@ -4,18 +4,9 @@ import (
 	"net/http"
 
 	"github.com/vikashparashar/bookings/pkg/config"
+	"github.com/vikashparashar/bookings/pkg/models"
 	"github.com/vikashparashar/bookings/pkg/render"
 )
-
-type Template_Date struct {
-	StringMap map[string]int
-	IntMap    map[string]int64
-	FloatMap  map[string]float64
-	Data      map[string]interface{}
-	CSRFToken string
-	Flash     string
-	Warning   string
-}
 
 // Repo is the Repository used by the handlers
 var Repo *Repository
@@ -38,23 +29,26 @@ func NewHandlers(r *Repository) {
 }
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	// perform some logic
-
+	stringMap := map[string]string{}
+	stringMap["Name"] = "Vikash"
 	// sending data to the template
-	render.RenderTemplates(w, "home.page.tmpl", nil)
+	render.RenderTemplates(w, "home.page.tmpl", &models.Template_Data{})
 }
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "about.page.tmpl", nil)
+	stringMap := map[string]string{}
+	stringMap["Name"] = "Vikash"
+	render.RenderTemplates(w, "about.page.tmpl", &models.Template_Data{StringMap: stringMap})
 }
 
 func (m *Repository) General(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "general.page.tmpl", nil)
+	render.RenderTemplates(w, "general.page.tmpl", &models.Template_Data{})
 }
 func (m *Repository) Major(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "major.page.tmpl", nil)
+	render.RenderTemplates(w, "major.page.tmpl", &models.Template_Data{})
 }
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "contact.page.tmpl", nil)
+	render.RenderTemplates(w, "contact.page.tmpl", &models.Template_Data{})
 }
 func (m *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, "check.page.tmpl", nil)
+	render.RenderTemplates(w, "check.page.tmpl", &models.Template_Data{})
 }
