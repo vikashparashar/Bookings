@@ -8,7 +8,6 @@ import (
 	"github.com/vikashparashar/bookings/pkg/config"
 	"github.com/vikashparashar/bookings/pkg/handlers"
 	"github.com/vikashparashar/bookings/pkg/render"
-	"github.com/vikashparashar/bookings/pkg/routes"
 )
 
 const (
@@ -38,7 +37,7 @@ func main() {
 	// http.ListenAndServe(portNumber, r)
 	srv := &http.Server{
 		Addr:    portNumber,
-		Handler: routes.Routes(&app),
+		Handler: Routes(&app),
 	}
 	fmt.Println("\t ->---->>    Starting The Application On Port : 8080    <<----<-")
 	err = srv.ListenAndServe()
