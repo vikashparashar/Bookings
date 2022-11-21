@@ -7,6 +7,16 @@ import (
 	"github.com/vikashparashar/bookings/pkg/render"
 )
 
+type Template_Date struct {
+	StringMap map[string]int
+	IntMap    map[string]int64
+	FloatMap  map[string]float64
+	Data      map[string]interface{}
+	CSRFToken string
+	Flash     string
+	Warning   string
+}
+
 // Repo is the Repository used by the handlers
 var Repo *Repository
 
