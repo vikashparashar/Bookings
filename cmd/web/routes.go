@@ -36,6 +36,7 @@ func Routes(app *config.AppConfig) http.Handler {
 
 	mux := chi.NewRouter()
 	mux.Use(middleware.Recoverer)
+	mux.Use(SessionLoad)
 	// mux.Use(WriteToConsole)
 
 	// Nosurf package is used for stoping CSRf (cross site ref )
