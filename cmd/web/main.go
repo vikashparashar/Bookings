@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/vikashparashar/bookings/pkg/config"
 	"github.com/vikashparashar/bookings/pkg/handlers"
 	"github.com/vikashparashar/bookings/pkg/render"
@@ -14,8 +16,23 @@ const (
 	portNumber string = ":8080"
 )
 
+var app config.AppConfig
+var session *scs.SessionManager
+
 func main() {
-	var app config.AppConfig
+
+	app.InProduction = false
+	// adding session's for server
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	// session.Cookie.Name = "session_id"
+	// session.Cookie.Domain = "example.com"
+	// session.Cookie.HttpOnly = true
+	// session.Cookie.Path = "/example/"
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction // true in production mode else false in developement mode
+	app.Session = session
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
