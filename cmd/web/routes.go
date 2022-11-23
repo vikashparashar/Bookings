@@ -43,10 +43,10 @@ func Routes(app *config.AppConfig) http.Handler {
 	mux.Use(NoSurf)
 	mux.Get("/", http.HandlerFunc(handlers.Repo.Home))
 	mux.Get("/about", http.HandlerFunc(handlers.Repo.About))
-	mux.Get("/general", http.HandlerFunc(handlers.Repo.General))
-	mux.Get("/major", http.HandlerFunc(handlers.Repo.Major))
-	mux.Get("/contact", http.HandlerFunc(handlers.Repo.Contact))
-	mux.Get("/check", http.HandlerFunc(handlers.Repo.CheckAvailability))
+	// mux.Get("/general", http.HandlerFunc(handlers.Repo.General))
+	// mux.Get("/major", http.HandlerFunc(handlers.Repo.Major))
+	// mux.Get("/contact", http.HandlerFunc(handlers.Repo.Contact))
+	// mux.Get("/check", http.HandlerFunc(handlers.Repo.CheckAvailability))
 	return mux
 
 }
