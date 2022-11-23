@@ -57,7 +57,7 @@ func RenderTemplates(w http.ResponseWriter, temp string, td *models.Template_Dat
 	err := t.Execute(buf, td)
 
 	if err != nil {
-		log.Fatalln("could ")
+		log.Fatalln(err)
 	}
 	// rander the template
 

@@ -43,7 +43,6 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
 	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
-
 	stringMap := map[string]string{}
 	// stringMap["Name"] = "Vikash"
 	stringMap["remote_ip"] = remoteIP
@@ -52,15 +51,15 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplates(w, "about.page.tmpl", &models.Template_Data{StringMap: stringMap})
 }
 
-// func (m *Repository) General(w http.ResponseWriter, r *http.Request) {
-// 	render.RenderTemplates(w, "general.page.tmpl", &models.Template_Data{})
-// }
-// func (m *Repository) Major(w http.ResponseWriter, r *http.Request) {
-// 	render.RenderTemplates(w, "major.page.tmpl", &models.Template_Data{})
-// }
-// func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-// 	render.RenderTemplates(w, "contact.page.tmpl", &models.Template_Data{})
-// }
-// func (m *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) {
-// 	render.RenderTemplates(w, "check.page.tmpl", &models.Template_Data{})
-// }
+func (m *Repository) General(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "general.page.tmpl", &models.Template_Data{})
+}
+func (m *Repository) Major(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "major.page.tmpl", &models.Template_Data{})
+}
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "contact.page.tmpl", &models.Template_Data{})
+}
+func (m *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, "check.page.tmpl", &models.Template_Data{})
+}
